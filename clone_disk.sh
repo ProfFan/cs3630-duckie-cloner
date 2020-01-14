@@ -109,6 +109,7 @@ sudo sed -i "s/duckie01/${host_name}/g" "$mp/data/stats/init_sd_card/parameters/
 sudo sed -i "s/-echo /-/g" "$mp/lib/systemd/system/report-mac.service"
 sudo sed -i "s#ExecStart=.*#ExecStart=/usr/bin/btuart#" "$mp/etc/systemd/system/hciuart.service"
 sudo cp ./btuart "$mp/usr/bin/btuart"
+sudo chmod +x "$mp/usr/bin/btuart"
 
 sudo umount $mp
 
