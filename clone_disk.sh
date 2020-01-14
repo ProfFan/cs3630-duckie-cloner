@@ -107,6 +107,7 @@ sudo sed -i "s/duckie01/${host_name}/g" "$mp/var/lib/cloud/instances/pirate001/u
 sudo sed -i "s/duckie01/${host_name}/g" "$mp/var/lib/cloud/instances/pirate001/user-data.txt.i"
 sudo sed -i "s/duckie01/${host_name}/g" "$mp/data/stats/init_sd_card/parameters/hostname"
 sudo sed -i "s/-echo /-/g" "$mp/lib/systemd/system/report-mac.service"
+sudo sed -i "s#ExecStart=.*#ExecStart=/usr/bin/btuart#" "$mp/etc/systemd/system/hciuart.service"
 
 sudo umount $mp
 
