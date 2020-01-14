@@ -86,16 +86,32 @@ duration=$SECONDS
 echo "[$duration] Resize File System"
 
 sudo parted -s ${device} "resizepart 2 -1" quit
+sudo partprobe ${device}
+
+sleep 5
+
 sudo e2fsck -f "${device}2"
 sudo resize2fs "${device}2"
 
 duration=$SECONDS
 echo "[$duration] Fixing Hostname"
 
+set +x
+
 mp=$(sudo mktemp -d)
 sudo mount "${device}2" $mp
 sudo sed -i "s/duckie01/${host_name}/g" "$mp/etc/hostname"
 sudo sed -i "s/duckie01/${host_name}/g" "$mp/etc/hosts"
+sudo sed -i "s/duckie01/${host_name}/g" "$mp/var/lib/cloud/instances/pirate001/cloud-config.txt"
+sudo sed -i "s/duckie01/${host_name}/g" "$mp/var/lib/cloud/instances/pirate001/user-data.txt"
+sudo sed -i "s/duckie01/${host_name}/g" "$mp/var/lib/cloud/instances/pirate001/user-data.txt.i"
+sudo sed -i "s/duckie01/${host_name}/g" "$mp/data/stats/init_sd_card/parameters/hostname"
+sudo sed -i "s/-echo /-/g" "$mp/lib/systemd/system/report-mac.service"
+
+sudo umount $mp
+
+sudo mount "${device}1" $mp
+sudo sed -i "s/duckie01/${host_name}/g" "$mp/user-data"
 sudo umount $mp
 sudo rmdir $mp
 
